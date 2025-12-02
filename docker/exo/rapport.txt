@@ -1,0 +1,58 @@
+# Créer un volume
+docker volume create mysql_data
+
+# Lancer MySQL avec le volume
+docker run -d \
+  --name mysql \
+  -e MYSQL_ROOT_PASSWORD=pass \
+  -v mysql_data:/var/lib/mysql \
+  mysql:8
+
+# Voir les conteneurs
+docker ps
+
+# Entrer dans le conteneur
+docker exec -it mysql bash
+
+# Se connecter à MySQL
+mysql -uroot -ppass
+
+# Créer la base et les données
+CREATE DATABASE demo;
+USE demo;
+CREATE TABLE users (
+  id INT PRIMARY KEY AUTO_INCREMENT,
+  name VARCHAR(50)
+);
+INSERT INTO users (name) VALUES ('Alice'), ('Bob'), ('Charlie');
+SELECT * FROM users;
+EXIT;
+
+# Quitter le conteneur
+exit
+
+# Arrêter MySQL
+docker stop mysql
+
+# Redémarrer MySQL
+docker start mysql
+
+# Vérifier les données
+docker exec -it mysql mysql -uroot -ppass -e "SELECT * FROM demo.users;"
+
+# Supprimer le conteneur
+docker stop mysql
+docker rm mysql
+
+# Vérifier que le volume existe toujours
+docker volume ls
+
+# Lancer un nouveau conteneur avec le même volume
+docker run -d \
+  --name mysql2 \
+  -e MYSQL_ROOT_PASSWORD=pass \
+  -v mysql_data:/var/lib/mysql \
+  mysql:8
+
+# Vérifier la persistance des données
+docker exec -it mysql2 mysql -uroot -ppass -e "SELECT * FROM demo.users;"

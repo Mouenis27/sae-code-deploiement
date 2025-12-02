@@ -1,0 +1,33 @@
+SYNTHÈSE DES MANIPULATIONS DOCKER
+
+1. Réseaux Docker
+- docker network ls
+- docker network create monreseau
+- docker network inspect monreseau
+- Conteneurs ajoutés sur monreseau
+
+2. Serveur web Nginx
+- docker run -d --name site --network monreseau nginx
+- Chemin de la page : /usr/share/nginx/html/index.html
+- Volume pour remplacer l’index :
+  -v "$PWD"/index.html:/usr/share/nginx/html/index.html
+- Accès via http://localhost:8080
+
+3. Gestion des erreurs
+- Port déjà utilisé
+- Nom de conteneur déjà utilisé
+- ping non présent dans nginx
+- Suppression conteneur : docker rm <nom>
+
+4. Commandes conteneurs
+- docker ps
+- docker stop <nom>
+- docker rm <nom>
+- docker exec -it <nom> sh
+
+5. Création d’un site simple
+- mkdir exo3
+- index.html créé en local
+- docker run avec volume pour afficher la page web personnalisée
+
+FIN.
