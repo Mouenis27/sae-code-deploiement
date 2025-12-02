@@ -1,0 +1,4 @@
+dockerfile 
+docker avec ses commande presents dans le terminal
+
+le nom Dockerfile

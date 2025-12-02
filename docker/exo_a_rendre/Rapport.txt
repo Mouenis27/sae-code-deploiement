@@ -1,0 +1,28 @@
+RAPPORT SUR LE DOCKERFILE MULTI-ETAPES POUR UNE APPLICATION JAVA
+
+1. Objectif
+Créer une image Docker capable de compiler puis exécuter un programme Java "Hello.java".
+
+2. Structure du Dockerfile
+Le Dockerfile utilise une construction multi-étapes composée de deux parties : une étape pour compiler, et une autre pour exécuter l’application.
+
+3. Étape 1 : "build"
+- Image utilisée : eclipse-temurin:21-jdk (contient le JDK complet).
+- WORKDIR /app : création d’un dossier de travail.
+- COPY Hello.java : copie du fichier source Java dans l’image.
+- RUN javac Hello.java : compilation du programme.
+→ Cette étape génère le fichier Hello.class.
+
+4. Étape 2 : "run"
+- Image utilisée : eclipse-temurin:21-jre (plus légère, seulement le JRE).
+- WORKDIR /app : dossier de travail dans l’image finale.
+- COPY --from=build /app/Hello.class . : copie du fichier compilé depuis l’étape build.
+- CMD ["java", "Hello"] : commande lancée au démarrage du conteneur.
+→ Cette étape exécute réellement le programme Java.
+
+5. Construction de l'image
+docker build -t mon-app .
+
+6. Exécution du conteneur
+docker run mon-app
+→ Le conteneur affiche : "Bonjour c'est pas moi".
